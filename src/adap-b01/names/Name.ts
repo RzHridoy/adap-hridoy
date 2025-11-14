@@ -15,12 +15,13 @@ export const ESCAPE_CHARACTER = '\\';
  */
 export class Name {
 
-    private delimiter: string = DEFAULT_DELIMITER;
-    private components: string[] = [];
+    protected delimiter: string = DEFAULT_DELIMITER;
+    protected components: string[] = [];
 
     /** Expects that all Name components are properly masked */
-    constructor(other: string[], delimiter?: string) {
-        throw new Error("needs implementation or deletion");
+    constructor(other: string[], delimiter: string = DEFAULT_DELIMITER) {
+    this.components = [...other];
+    this.delimiter = delimiter;
     }
 
     /**
@@ -29,8 +30,20 @@ export class Name {
      * Users can vary the delimiter character to be used
      */
     public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
+    const unmaskedComponents = this.components.map((c) => {
+      let unmasked = "";
+      for (let i = 0; i < c.length; i++) {
+        if (c[i] === ESCAPE_CHARACTER && i + 1 < c.length) {
+          unmasked += c[i + 1];
+          i++;
+        } else {
+          unmasked += c[i];
+        }
+      }
+      return unmasked;
+    });
+    return unmaskedComponents.join(delimiter);
+  }
 
     /** 
      * Returns a machine-readable representation of Name instance using default special characters
@@ -38,13 +51,16 @@ export class Name {
      * The special characters in the data string are the default characters
      */
     public asDataString(): string {
-        throw new Error("needs implementation or deletion");
+        return this.components.join(DEFAULT_DELIMITER);
     }
 
     /** Returns properly masked component string */
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+    if (i < 0 || i >= this.components.length) {
+      throw new Error("Index out of bounds");
     }
+    return this.components[i];
+}
 
     /** Expects that new Name component c is properly masked */
     public setComponent(i: number, c: string): void {
@@ -53,21 +69,27 @@ export class Name {
 
      /** Returns number of components in Name instance */
      public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.components.length;
     }
 
     /** Expects that new Name component c is properly masked */
     public insert(i: number, c: string): void {
-        throw new Error("needs implementation or deletion");
+        if (i < 0 || i > this.components.length) {
+      throw new Error("Index out of bounds");
+    }
+    this.components.splice(i, 0, c);
     }
 
     /** Expects that new Name component c is properly masked */
     public append(c: string): void {
-        throw new Error("needs implementation or deletion");
+        this.components.push(c);
     }
 
     public remove(i: number): void {
-        throw new Error("needs implementation or deletion");
+    if (i < 0 || i >= this.components.length) {
+      throw new Error("Index out of bounds");
     }
+    this.components.splice(i, 1);
+  }
 
 }
