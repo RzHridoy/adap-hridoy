@@ -6,66 +6,95 @@ export class StringName extends AbstractName {
 
     protected name: string = "";
     protected noComponents: number = 0;
+    parseComponents: any;
+    buildString: any;
+    updateFormComponents: any;
 
     constructor(source: string, delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
+        super(delimiter ?? DEFAULT_DELIMITER);
+        this.name = source ?? "";
+        this.noComponents = this.parseComponents().length
     }
 
     public clone(): Name {
-        throw new Error("needs implementation or deletion");
+        return new StringName(this.name, this.delimiter);
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
+        if (delimiter === this.delimiter) {
+            return this.name;
+        }
+        const components = this.parseComponents();
+        return this.buildString(components, delimiter);
     }
 
     public asDataString(): string {
-        throw new Error("needs implementation or deletion");
+        return this.name;
     }
 
     public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
+        return super.isEqual(other);
     }
 
     public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
+        return super.getHashCode();
     }
 
     public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+        return super.isEmpty();
     }
 
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        return super.getDelimiterCharacter();
     }
 
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.noComponents;
     }
 
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+        const components =  this.parseComponents();
+        if (i < 0 || i >= components.length) {
+            throw new RangeError("Out of range");
+        }
+        return components[i];
     }
 
     public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        const components =  this.parseComponents();
+        if (i < 0 || i >= components.length) {
+            throw new RangeError("Out of range");
+        }
+        components[i] = c;
+        this.updateFormComponents(components);
     }
 
     public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        const components =  this.parseComponents();
+        if (i < 0 || i >= components.length) {
+            throw new RangeError("Out of range");
+        }
+        components.splice(i, 0, c);
+        this.updateFormComponents(components);
     }
 
     public append(c: string) {
-        throw new Error("needs implementation or deletion");
+        const components = this.parseComponents();
+        components.public(c);
+        this.updateFormComponents(components);
     }
 
     public remove(i: number) {
-        throw new Error("needs implementation or deletion");
+        const components =  this.parseComponents();
+        if (i < 0 || i >= components.length) {
+            throw new RangeError("Out of range");
+        }
+        components.splice(i, 1);
+        this.updateFormComponents(components);
     }
 
     public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+        super.concat(other);
     }
 
 }
